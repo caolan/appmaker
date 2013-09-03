@@ -16,7 +16,8 @@
     "ejs-locals": "~1.0.2",
     "knox": "~0.8.6",
     "moniker": "~0.1.2",
-    "node-uuid": "~1.4.1"
+    "node-uuid": "~1.4.1",
+    "hoodie-server": "git://github.com/hoodiehq/hoodie-server.git#master-merge-n_m_a"
   },
   "engines": {
     "node": ">0.8.x",

@@ -12,7 +12,8 @@ http = require('http'),
 engine = require('ejs-locals'),
 path = require('path'),
 store = require('./lib/store'),
-uuid = require('node-uuid');
+uuid = require('node-uuid'),
+hoodie = require('hoodie-server');
 
 // .env files aren't great at empty values.
 process.env.ASSET_HOST = typeof process.env.ASSET_HOST === 'undefined' ? '' : process.env.ASSET_HOST;
@@ -54,6 +55,19 @@ routes.publish.init(store.init(process.env.S3_KEY, process.env.S3_SECRET, proces
   __dirname + '/views', process.env.PUBLISH_HOST, process.env.PUBLISH_HOST_PREFIX, process.env.S3_OBJECT_PREFIX);
 app.post('/publish', routes.publish.publish);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+var hoodie_config = {
+  www_port: 5010,
+  admin_port: 5020,
+  admin_password: 'testing',
+  boring: true
+};
+hoodie.start(hoodie_config, function (err) {
+  if (err) {
+    console.error(err);
+    return process.exit(1);
+  }
+  console.log('Hoodie server started');
+  http.createServer(app).listen(app.get('port'), function(){
+    console.log("Express server listening on port " + app.get('port'));
+  });
 });
